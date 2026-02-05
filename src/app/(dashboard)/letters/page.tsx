@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Box, Typography, Stack, Snackbar, Alert } from "@mui/material";
+import { Box, Typography, Stack, Snackbar, Alert, TextField, InputAdornment } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import { MetricsRow } from "@/components/dashboard/MetricsRow";
 import { TriageList } from "@/components/dashboard/TriageList";
 
@@ -23,12 +24,10 @@ interface DemoStudent {
   letters: DemoLetter[];
 }
 
-// Helper function to calculate days until deadline
 function getDaysUntil(deadline: string, now: number): number {
   return Math.ceil((new Date(deadline).getTime() - now) / (1000 * 60 * 60 * 24));
 }
 
-// Generate demo data with fixed dates (relative to a base time)
 function generateDemoStudents(): DemoStudent[] {
   const now = Date.now();
   return [
@@ -44,7 +43,7 @@ function generateDemoStudents(): DemoStudent[] {
         {
           id: "l1",
           status: "DRAFT",
-          deadline: new Date(now + 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days
+          deadline: new Date(now + 2 * 24 * 60 * 60 * 1000).toISOString(),
         },
       ],
     },
@@ -59,11 +58,10 @@ function generateDemoStudents(): DemoStudent[] {
         {
           id: "l2",
           status: "REVIEW",
-          deadline: new Date(now + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days
+          deadline: new Date(now + 5 * 24 * 60 * 60 * 1000).toISOString(),
         },
       ],
     },
-
     // === WAITING ON STUDENT (2 students) ===
     {
       id: "3",
@@ -76,7 +74,7 @@ function generateDemoStudents(): DemoStudent[] {
         {
           id: "l3",
           status: "BLOCKED",
-          deadline: new Date(now + 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 days
+          deadline: new Date(now + 10 * 24 * 60 * 60 * 1000).toISOString(),
         },
       ],
     },
@@ -91,11 +89,10 @@ function generateDemoStudents(): DemoStudent[] {
         {
           id: "l4",
           status: "BLOCKED",
-          deadline: new Date(now + 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days
+          deadline: new Date(now + 14 * 24 * 60 * 60 * 1000).toISOString(),
         },
       ],
     },
-
     // === COMPLETED YTD (2 students) ===
     {
       id: "5",
@@ -120,19 +117,17 @@ function generateDemoStudents(): DemoStudent[] {
 
 export default function LettersPage() {
   const [filter, setFilter] = useState<"urgent" | "pending" | "completed" | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string }>({
     open: false,
     message: "",
   });
 
-  // Generate demo data once using useState with lazy initializer
-  // This ensures Date.now() is only called once during initial render
   const [{ demoStudents, currentTime }] = useState(() => ({
     demoStudents: generateDemoStudents(),
     currentTime: Date.now(),
   }));
 
-  // Calculate metrics using memoized current time
   const urgentCount = useMemo(() => {
     return demoStudents.filter((s) => {
       const letter = s.letters[0];
@@ -150,26 +145,40 @@ export default function LettersPage() {
     return demoStudents.filter((s) => s.letters[0]?.status === "COMPLETED").length;
   }, [demoStudents]);
 
-  // Filter students based on selected filter
   const filteredStudents = useMemo(() => {
-    return demoStudents.filter((student) => {
-      if (!filter) return true;
+    let result = demoStudents;
 
-      const letter = student.letters[0];
-      if (filter === "urgent") {
-        if (!letter?.deadline) return false;
-        const daysUntil = getDaysUntil(letter.deadline, currentTime);
-        return daysUntil <= 7 && letter.status !== "COMPLETED";
-      }
-      if (filter === "pending") {
-        return letter?.status === "BLOCKED";
-      }
-      if (filter === "completed") {
-        return letter?.status === "COMPLETED";
-      }
-      return true;
-    }).sort((a, b) => {
-      // Sort by deadline (earliest first), with no deadline at the end
+    // Apply search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (s) =>
+          s.firstName.toLowerCase().includes(query) ||
+          s.lastName.toLowerCase().includes(query)
+      );
+    }
+
+    // Apply status filter
+    if (filter) {
+      result = result.filter((student) => {
+        const letter = student.letters[0];
+        if (filter === "urgent") {
+          if (!letter?.deadline) return false;
+          const daysUntil = getDaysUntil(letter.deadline, currentTime);
+          return daysUntil <= 7 && letter.status !== "COMPLETED";
+        }
+        if (filter === "pending") {
+          return letter?.status === "BLOCKED";
+        }
+        if (filter === "completed") {
+          return letter?.status === "COMPLETED";
+        }
+        return true;
+      });
+    }
+
+    // Sort by deadline
+    return result.sort((a, b) => {
       const aDeadline = a.letters[0]?.deadline;
       const bDeadline = b.letters[0]?.deadline;
       if (!aDeadline && !bDeadline) return 0;
@@ -177,7 +186,7 @@ export default function LettersPage() {
       if (!bDeadline) return -1;
       return new Date(aDeadline).getTime() - new Date(bDeadline).getTime();
     });
-  }, [demoStudents, filter, currentTime]);
+  }, [demoStudents, filter, searchQuery, currentTime]);
 
   const handleNudge = (studentId: string) => {
     const student = demoStudents.find((s) => s.id === studentId);
@@ -195,51 +204,52 @@ export default function LettersPage() {
 
   return (
     <Box>
-      {/* Page Header */}
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ mb: 3 }}
-      >
-        <Box>
-          <Typography variant="h4" sx={{ fontWeight: 700 }}>
+      {/* Compact Header with Search and Filters */}
+      <Stack spacing={1.5} sx={{ mb: 2 }}>
+        {/* Title Row */}
+        <Stack direction="row" alignItems="center" justifyContent="space-between" flexWrap="wrap" gap={1}>
+          <Typography variant="h5" sx={{ fontWeight: 700 }}>
             Letters
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Manage recommendation letters for your students
-          </Typography>
-        </Box>
+          <TextField
+            size="small"
+            placeholder="Search students..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon sx={{ fontSize: 20, color: "text.disabled" }} />
+                </InputAdornment>
+              ),
+            }}
+            sx={{
+              width: { xs: "100%", sm: 220 },
+              "& .MuiOutlinedInput-root": {
+                bgcolor: "background.paper",
+                fontSize: "0.875rem",
+              },
+            }}
+          />
+        </Stack>
+
+        {/* Metrics/Filter Row */}
+        <MetricsRow
+          urgent={urgentCount}
+          pending={pendingCount}
+          completed={completedCount}
+          activeFilter={filter}
+          onFilterChange={handleFilterChange}
+        />
       </Stack>
 
-      {/* Metrics Row - "The Pulse" */}
-      <MetricsRow
-        urgent={urgentCount}
-        pending={pendingCount}
-        completed={completedCount}
-        onFilterChange={handleFilterChange}
-      />
-
-      {/* Filter indicator */}
-      {filter && (
-        <Typography
-          variant="body2"
-          sx={{ mb: 2, color: "text.secondary" }}
-          onClick={() => setFilter(null)}
-          style={{ cursor: "pointer" }}
-        >
-          Showing: {filter === "urgent" ? "Due This Week" : filter === "pending" ? "Waiting on Student" : "Completed"}{" "}
-          <span style={{ textDecoration: "underline" }}>(clear)</span>
-        </Typography>
-      )}
-
-      {/* Triage List */}
+      {/* Student List */}
       <TriageList students={filteredStudents} onNudge={handleNudge} />
 
-      {/* Snackbar for nudge confirmation */}
+      {/* Snackbar */}
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={4000}
+        autoHideDuration={3000}
         onClose={() => setSnackbar({ ...snackbar, open: false })}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >

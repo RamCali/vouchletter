@@ -19,7 +19,8 @@
       "Bash(vercel:*)",
       "Bash(git commit:*)",
       "Bash(git push)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(git push:*)"
     ]
   }
 }
