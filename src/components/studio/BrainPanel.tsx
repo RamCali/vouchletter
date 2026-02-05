@@ -45,17 +45,16 @@ function InsertableSnippet({
   title,
   content,
   onInsert,
+  isAdded,
 }: {
   title: string;
   content: string;
   onInsert?: (text: string) => void;
+  isAdded?: boolean;
 }) {
-  const [sent, setSent] = useState(false);
-
   const handleInsert = () => {
+    if (isAdded) return;
     onInsert?.(content);
-    setSent(true);
-    setTimeout(() => setSent(false), 1500);
   };
 
   return (
@@ -64,8 +63,9 @@ function InsertableSnippet({
       sx={{
         mb: 1.5,
         transition: "all 0.2s ease",
-        borderColor: sent ? "success.main" : "divider",
-        bgcolor: sent ? "success.50" : "background.paper",
+        borderColor: isAdded ? "success.main" : "divider",
+        bgcolor: isAdded ? "success.50" : "background.paper",
+        opacity: isAdded ? 0.7 : 1,
       }}
     >
       <CardContent sx={{ py: 1.25, px: 1.5, "&:last-child": { pb: 1.25 } }}>
@@ -73,34 +73,53 @@ function InsertableSnippet({
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography
               variant="caption"
-              sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.7rem" }}
+              sx={{
+                fontWeight: 600,
+                color: isAdded ? "success.dark" : "text.secondary",
+                fontSize: "0.7rem",
+              }}
             >
-              {title}
+              {isAdded ? `✓ ${title}` : title}
             </Typography>
-            <Typography variant="body2" sx={{ fontSize: "0.85rem", lineHeight: 1.5, mt: 0.25 }}>
+            <Typography
+              variant="body2"
+              sx={{
+                fontSize: "0.85rem",
+                lineHeight: 1.5,
+                mt: 0.25,
+                color: isAdded ? "text.secondary" : "text.primary",
+              }}
+            >
               {content}
             </Typography>
           </Box>
-          <Tooltip title={sent ? "Added!" : "Add to letter"}>
-            <IconButton
-              size="small"
-              onClick={handleInsert}
-              sx={{
-                bgcolor: sent ? "success.main" : "primary.50",
-                color: sent ? "white" : "primary.main",
-                width: 28,
-                height: 28,
-                "&:hover": {
-                  bgcolor: sent ? "success.main" : "primary.100",
-                },
-              }}
-            >
-              {sent ? (
-                <CheckIcon sx={{ fontSize: 16 }} />
-              ) : (
-                <ArrowForwardIcon sx={{ fontSize: 16 }} />
-              )}
-            </IconButton>
+          <Tooltip title={isAdded ? "Already in letter" : "Add to letter"}>
+            <span>
+              <IconButton
+                size="small"
+                onClick={handleInsert}
+                disabled={isAdded}
+                sx={{
+                  bgcolor: isAdded ? "success.main" : "primary.50",
+                  color: isAdded ? "white" : "primary.main",
+                  width: 28,
+                  height: 28,
+                  "&:hover": {
+                    bgcolor: isAdded ? "success.main" : "primary.100",
+                  },
+                  "&.Mui-disabled": {
+                    bgcolor: "success.main",
+                    color: "white",
+                  },
+                }}
+              >
+                {isAdded ? (
+                  <CheckIcon sx={{ fontSize: 16 }} />
+                ) : (
+                  <ArrowForwardIcon sx={{ fontSize: 16 }} />
+                )}
+              </IconButton>
+            </span>
           </Tooltip>
         </Stack>
       </CardContent>
@@ -133,10 +152,18 @@ export function BrainPanel({
   onInsertToCanvas?: (text: string) => void;
 }) {
   const [tab, setTab] = useState(0);
+  const [addedContent, setAddedContent] = useState<Set<string>>(new Set());
+
+  // Track and insert content - prevents duplicate insertions
+  const handleInsert = (content: string) => {
+    if (addedContent.has(content)) return;
+    setAddedContent((prev) => new Set(prev).add(content));
+    onInsertToCanvas?.(content);
+  };
 
   // Handle word chip click - insert with formatting
   const handleWordInsert = (word: string) => {
-    onInsertToCanvas?.(word);
+    handleInsert(word);
   };
 
   return (
@@ -213,30 +240,35 @@ export function BrainPanel({
               Three Words
             </Typography>
             <Stack direction="row" spacing={0.75} sx={{ mb: 2, mt: 0.75, flexWrap: "wrap", gap: 0.75 }}>
-              {bragSheet.threeWords.map((w, i) => (
-                <Chip
-                  key={i}
-                  label={w}
-                  size="small"
-                  color="primary"
-                  variant="outlined"
-                  onClick={() => handleWordInsert(w)}
-                  deleteIcon={<ArrowForwardIcon sx={{ fontSize: 14 }} />}
-                  onDelete={() => handleWordInsert(w)}
-                  sx={{
-                    fontSize: "0.75rem",
-                    height: 26,
-                    cursor: "pointer",
-                    "&:hover": { bgcolor: "primary.50" },
-                  }}
-                />
-              ))}
+              {bragSheet.threeWords.map((w, i) => {
+                const isWordAdded = addedContent.has(w);
+                return (
+                  <Chip
+                    key={i}
+                    label={isWordAdded ? `✓ ${w}` : w}
+                    size="small"
+                    color={isWordAdded ? "success" : "primary"}
+                    variant={isWordAdded ? "filled" : "outlined"}
+                    onClick={isWordAdded ? undefined : () => handleWordInsert(w)}
+                    deleteIcon={isWordAdded ? <CheckIcon sx={{ fontSize: 14 }} /> : <ArrowForwardIcon sx={{ fontSize: 14 }} />}
+                    onDelete={isWordAdded ? undefined : () => handleWordInsert(w)}
+                    sx={{
+                      fontSize: "0.75rem",
+                      height: 26,
+                      cursor: isWordAdded ? "default" : "pointer",
+                      opacity: isWordAdded ? 0.7 : 1,
+                      "&:hover": isWordAdded ? {} : { bgcolor: "primary.50" },
+                    }}
+                  />
+                );
+              })}
             </Stack>
             {bragSheet.intellectualSpark && (
               <InsertableSnippet
                 title="Intellectual Spark"
                 content={bragSheet.intellectualSpark}
-                onInsert={onInsertToCanvas}
+                onInsert={handleInsert}
+                isAdded={addedContent.has(bragSheet.intellectualSpark)}
               />
             )}
           </>
@@ -248,14 +280,16 @@ export function BrainPanel({
               <InsertableSnippet
                 title="Struggle Story"
                 content={bragSheet.struggleStory}
-                onInsert={onInsertToCanvas}
+                onInsert={handleInsert}
+                isAdded={addedContent.has(bragSheet.struggleStory)}
               />
             )}
             {bragSheet.leadershipMoment && (
               <InsertableSnippet
                 title="Leadership Moment"
                 content={bragSheet.leadershipMoment}
-                onInsert={onInsertToCanvas}
+                onInsert={handleInsert}
+                isAdded={addedContent.has(bragSheet.leadershipMoment)}
               />
             )}
             {bragSheet.keyAnecdotes?.map((a, i) => (
@@ -263,7 +297,8 @@ export function BrainPanel({
                 key={i}
                 title={a.title}
                 content={a.description}
-                onInsert={onInsertToCanvas}
+                onInsert={handleInsert}
+                isAdded={addedContent.has(a.description)}
               />
             ))}
           </>
@@ -315,7 +350,8 @@ export function BrainPanel({
               <InsertableSnippet
                 title="Transcript Highlights"
                 content={bragSheet.transcriptNotes}
-                onInsert={onInsertToCanvas}
+                onInsert={handleInsert}
+                isAdded={addedContent.has(bragSheet.transcriptNotes)}
               />
             )}
           </>
