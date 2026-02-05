@@ -1,11 +1,26 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Paper, Tabs, Tab, Typography, Chip, Stack, IconButton, Tooltip, Card, CardContent, Divider, Rating } from "@mui/material";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import {
+  Box,
+  Paper,
+  Tabs,
+  Tab,
+  Typography,
+  Chip,
+  Stack,
+  IconButton,
+  Tooltip,
+  Card,
+  CardContent,
+  Divider,
+  Rating,
+} from "@mui/material";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import AssessmentIcon from "@mui/icons-material/Assessment";
+import CheckIcon from "@mui/icons-material/Check";
 
 interface BragSheet {
   threeWords: string[];
@@ -19,71 +34,290 @@ interface BragSheet {
   awards: { name: string; year: number }[] | null;
 }
 
-interface Student { firstName: string; lastName: string; grade: number; gpa: number | null; }
+interface Student {
+  firstName: string;
+  lastName: string;
+  grade: number;
+  gpa: number | null;
+}
 
-function CopyableSnippet({ title, content, onCopy }: { title: string; content: string; onCopy?: (t: string) => void }) {
+function InsertableSnippet({
+  title,
+  content,
+  onInsert,
+}: {
+  title: string;
+  content: string;
+  onInsert?: (text: string) => void;
+}) {
+  const [sent, setSent] = useState(false);
+
+  const handleInsert = () => {
+    onInsert?.(content);
+    setSent(true);
+    setTimeout(() => setSent(false), 1500);
+  };
+
   return (
-    <Card variant="outlined" sx={{ mb: 2 }}>
-      <CardContent sx={{ py: 1.5, "&:last-child": { pb: 1.5 } }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-          <Typography variant="subtitle2" color="text.secondary">{title}</Typography>
-          <Tooltip title="Copy"><IconButton size="small" onClick={() => { navigator.clipboard.writeText(content); onCopy?.(content); }}><ContentCopyIcon fontSize="small" /></IconButton></Tooltip>
+    <Card
+      variant="outlined"
+      sx={{
+        mb: 1.5,
+        transition: "all 0.2s ease",
+        borderColor: sent ? "success.main" : "divider",
+        bgcolor: sent ? "success.50" : "background.paper",
+      }}
+    >
+      <CardContent sx={{ py: 1.25, px: 1.5, "&:last-child": { pb: 1.25 } }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={1}>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography
+              variant="caption"
+              sx={{ fontWeight: 600, color: "text.secondary", fontSize: "0.7rem" }}
+            >
+              {title}
+            </Typography>
+            <Typography variant="body2" sx={{ fontSize: "0.85rem", lineHeight: 1.5, mt: 0.25 }}>
+              {content}
+            </Typography>
+          </Box>
+          <Tooltip title={sent ? "Added!" : "Add to letter"}>
+            <IconButton
+              size="small"
+              onClick={handleInsert}
+              sx={{
+                bgcolor: sent ? "success.main" : "primary.50",
+                color: sent ? "white" : "primary.main",
+                width: 28,
+                height: 28,
+                "&:hover": {
+                  bgcolor: sent ? "success.main" : "primary.100",
+                },
+              }}
+            >
+              {sent ? (
+                <CheckIcon sx={{ fontSize: 16 }} />
+              ) : (
+                <ArrowForwardIcon sx={{ fontSize: 16 }} />
+              )}
+            </IconButton>
+          </Tooltip>
         </Stack>
-        <Typography variant="body2">{content}</Typography>
       </CardContent>
     </Card>
   );
 }
 
-const ratingMap: Record<string, number> = { TOP_1_PERCENT: 5, TOP_5_PERCENT: 4.5, TOP_10_PERCENT: 4, TOP_25_PERCENT: 3, TOP_50_PERCENT: 2 };
-const ratingLabels: Record<string, string> = { TOP_1_PERCENT: "Top 1%", TOP_5_PERCENT: "Top 5%", TOP_10_PERCENT: "Top 10%", TOP_25_PERCENT: "Top 25%", TOP_50_PERCENT: "Top 50%" };
+const ratingMap: Record<string, number> = {
+  TOP_1_PERCENT: 5,
+  TOP_5_PERCENT: 4.5,
+  TOP_10_PERCENT: 4,
+  TOP_25_PERCENT: 3,
+  TOP_50_PERCENT: 2,
+};
+const ratingLabels: Record<string, string> = {
+  TOP_1_PERCENT: "Top 1%",
+  TOP_5_PERCENT: "Top 5%",
+  TOP_10_PERCENT: "Top 10%",
+  TOP_25_PERCENT: "Top 25%",
+  TOP_50_PERCENT: "Top 50%",
+};
 
-export function BrainPanel({ student, bragSheet, onCopySnippet }: { student: Student; bragSheet: BragSheet; onCopySnippet?: (t: string) => void }) {
+export function BrainPanel({
+  student,
+  bragSheet,
+  onInsertToCanvas,
+}: {
+  student: Student;
+  bragSheet: BragSheet;
+  onInsertToCanvas?: (text: string) => void;
+}) {
   const [tab, setTab] = useState(0);
 
+  // Handle word chip click - insert with formatting
+  const handleWordInsert = (word: string) => {
+    onInsertToCanvas?.(word);
+  };
+
   return (
-    <Paper sx={{ height: "100%", display: "flex", flexDirection: "column", overflow: "hidden" }}>
-      <Box sx={{ px: 2, pt: 2, pb: 1 }}>
-        <Typography variant="h6" sx={{ fontWeight: 600 }}>The Brain</Typography>
-        <Typography variant="caption" color="text.secondary">Context for {student.firstName} {student.lastName}</Typography>
+    <Paper
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        border: "1px solid",
+        borderColor: "divider",
+      }}
+    >
+      {/* Header */}
+      <Box sx={{ px: 2, py: 1.25, borderBottom: 1, borderColor: "divider", bgcolor: "grey.50" }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Box>
+            <Typography variant="subtitle1" sx={{ fontWeight: 600, fontSize: "0.95rem" }}>
+              The Brain
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.7rem" }}>
+              Click → to add to letter
+            </Typography>
+          </Box>
+        </Stack>
       </Box>
-      <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2, borderBottom: 1, borderColor: "divider" }} variant="fullWidth">
-        <Tab icon={<LightbulbIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Hook" sx={{ minHeight: 48, minWidth: 0, px: 1 }} />
-        <Tab icon={<EmojiEventsIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Proof" sx={{ minHeight: 48, minWidth: 0, px: 1 }} />
-        <Tab icon={<AssessmentIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Stats" sx={{ minHeight: 48, minWidth: 0, px: 1 }} />
+
+      {/* Tabs */}
+      <Tabs
+        value={tab}
+        onChange={(_, v) => setTab(v)}
+        sx={{
+          minHeight: 40,
+          borderBottom: 1,
+          borderColor: "divider",
+          "& .MuiTab-root": { minHeight: 40, py: 0 },
+        }}
+        variant="fullWidth"
+      >
+        <Tab
+          icon={<LightbulbIcon sx={{ fontSize: 16 }} />}
+          iconPosition="start"
+          label="Hook"
+          sx={{ fontSize: "0.75rem", minWidth: 0, px: 1 }}
+        />
+        <Tab
+          icon={<EmojiEventsIcon sx={{ fontSize: 16 }} />}
+          iconPosition="start"
+          label="Proof"
+          sx={{ fontSize: "0.75rem", minWidth: 0, px: 1 }}
+        />
+        <Tab
+          icon={<AssessmentIcon sx={{ fontSize: 16 }} />}
+          iconPosition="start"
+          label="Stats"
+          sx={{ fontSize: "0.75rem", minWidth: 0, px: 1 }}
+        />
       </Tabs>
-      <Box sx={{ flex: 1, overflow: "auto", px: 2, py: 2 }}>
+
+      {/* Content */}
+      <Box sx={{ flex: 1, overflow: "auto", p: 1.5 }}>
         {tab === 0 && (
           <>
-            <Typography variant="subtitle2" sx={{ mb: 1 }}>Three Words</Typography>
-            <Stack direction="row" spacing={1} sx={{ mb: 3 }}>{bragSheet.threeWords.map((w, i) => <Chip key={i} label={w} color="primary" variant="outlined" onClick={() => onCopySnippet?.(w)} />)}</Stack>
-            {bragSheet.intellectualSpark && <CopyableSnippet title="Intellectual Spark" content={bragSheet.intellectualSpark} onCopy={onCopySnippet} />}
+            <Typography
+              variant="caption"
+              sx={{
+                fontWeight: 600,
+                color: "text.secondary",
+                fontSize: "0.65rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.5px",
+              }}
+            >
+              Three Words
+            </Typography>
+            <Stack direction="row" spacing={0.75} sx={{ mb: 2, mt: 0.75, flexWrap: "wrap", gap: 0.75 }}>
+              {bragSheet.threeWords.map((w, i) => (
+                <Chip
+                  key={i}
+                  label={w}
+                  size="small"
+                  color="primary"
+                  variant="outlined"
+                  onClick={() => handleWordInsert(w)}
+                  deleteIcon={<ArrowForwardIcon sx={{ fontSize: 14 }} />}
+                  onDelete={() => handleWordInsert(w)}
+                  sx={{
+                    fontSize: "0.75rem",
+                    height: 26,
+                    cursor: "pointer",
+                    "&:hover": { bgcolor: "primary.50" },
+                  }}
+                />
+              ))}
+            </Stack>
+            {bragSheet.intellectualSpark && (
+              <InsertableSnippet
+                title="Intellectual Spark"
+                content={bragSheet.intellectualSpark}
+                onInsert={onInsertToCanvas}
+              />
+            )}
           </>
         )}
+
         {tab === 1 && (
           <>
-            {bragSheet.struggleStory && <CopyableSnippet title="Struggle Story" content={bragSheet.struggleStory} onCopy={onCopySnippet} />}
-            {bragSheet.leadershipMoment && <CopyableSnippet title="Leadership Moment" content={bragSheet.leadershipMoment} onCopy={onCopySnippet} />}
-            {bragSheet.keyAnecdotes?.map((a, i) => <CopyableSnippet key={i} title={a.title} content={a.description} onCopy={onCopySnippet} />)}
+            {bragSheet.struggleStory && (
+              <InsertableSnippet
+                title="Struggle Story"
+                content={bragSheet.struggleStory}
+                onInsert={onInsertToCanvas}
+              />
+            )}
+            {bragSheet.leadershipMoment && (
+              <InsertableSnippet
+                title="Leadership Moment"
+                content={bragSheet.leadershipMoment}
+                onInsert={onInsertToCanvas}
+              />
+            )}
+            {bragSheet.keyAnecdotes?.map((a, i) => (
+              <InsertableSnippet
+                key={i}
+                title={a.title}
+                content={a.description}
+                onInsert={onInsertToCanvas}
+              />
+            ))}
           </>
         )}
+
         {tab === 2 && (
           <>
-            <Card variant="outlined" sx={{ mb: 2 }}>
-              <CardContent>
-                <Stack direction="row" justifyContent="space-around" alignItems="center" sx={{ mb: 2 }}>
-                  <Box sx={{ textAlign: "center" }}><Typography variant="caption" color="text.secondary">GPA</Typography><Typography variant="h5" sx={{ fontWeight: 700 }}>{student.gpa?.toFixed(2) || "N/A"}</Typography></Box>
+            <Card variant="outlined" sx={{ mb: 1.5 }}>
+              <CardContent sx={{ py: 1.25, "&:last-child": { pb: 1.25 } }}>
+                <Stack direction="row" justifyContent="space-around" alignItems="center" sx={{ mb: 1.5 }}>
+                  <Box sx={{ textAlign: "center" }}>
+                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
+                      GPA
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                      {student.gpa?.toFixed(2) || "N/A"}
+                    </Typography>
+                  </Box>
                   <Divider orientation="vertical" flexItem />
-                  <Box sx={{ textAlign: "center" }}><Typography variant="caption" color="text.secondary">Grade</Typography><Typography variant="h5" sx={{ fontWeight: 700 }}>{student.grade}</Typography></Box>
+                  <Box sx={{ textAlign: "center" }}>
+                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
+                      Grade
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 700, lineHeight: 1.2 }}>
+                      {student.grade}
+                    </Typography>
+                  </Box>
                 </Stack>
-                <Typography variant="caption" color="text.secondary">Counselor Rating</Typography>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Rating value={ratingMap[bragSheet.counselorRating || ""] || 3} precision={0.5} readOnly size="small" />
-                  <Chip label={ratingLabels[bragSheet.counselorRating || ""] || "N/A"} size="small" color="primary" />
+                <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
+                  Counselor Rating
+                </Typography>
+                <Stack direction="row" spacing={1} alignItems="center" sx={{ mt: 0.5 }}>
+                  <Rating
+                    value={ratingMap[bragSheet.counselorRating || ""] || 3}
+                    precision={0.5}
+                    readOnly
+                    size="small"
+                  />
+                  <Chip
+                    label={ratingLabels[bragSheet.counselorRating || ""] || "N/A"}
+                    size="small"
+                    color="primary"
+                    sx={{ height: 22, fontSize: "0.7rem" }}
+                  />
                 </Stack>
               </CardContent>
             </Card>
-            {bragSheet.transcriptNotes && <CopyableSnippet title="Transcript Highlights" content={bragSheet.transcriptNotes} onCopy={onCopySnippet} />}
+            {bragSheet.transcriptNotes && (
+              <InsertableSnippet
+                title="Transcript Highlights"
+                content={bragSheet.transcriptNotes}
+                onInsert={onInsertToCanvas}
+              />
+            )}
           </>
         )}
       </Box>

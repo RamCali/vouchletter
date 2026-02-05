@@ -33,7 +33,8 @@ type LetterAngle = "RESILIENCE" | "STEM" | "COMMUNITY";
 
 interface CanvasPanelProps {
   studentName: string;
-  initialContent?: string;
+  content: string;
+  onContentChange: (content: string) => void;
   initialTone?: LetterTone;
   initialAngle?: LetterAngle;
   onGenerate?: (tone: LetterTone, angle: LetterAngle) => Promise<string>;
@@ -60,14 +61,14 @@ const MAX_WORDS = 650;
 
 export function CanvasPanel({
   studentName,
-  initialContent = "",
+  content,
+  onContentChange,
   initialTone = "WARM",
   initialAngle = "RESILIENCE",
   onGenerate,
   onSave,
   onExport,
 }: CanvasPanelProps) {
-  const [content, setContent] = useState(initialContent);
   const [tone, setTone] = useState<LetterTone>(initialTone);
   const [angle, setAngle] = useState<LetterAngle>(initialAngle);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -98,7 +99,7 @@ export function CanvasPanel({
     setIsGenerating(true);
     try {
       const generated = await onGenerate(tone, angle);
-      setContent(generated);
+      onContentChange(generated);
       setFerpaChecked(false);
     } finally {
       setIsGenerating(false);
@@ -269,7 +270,7 @@ export function CanvasPanel({
                         borderColor: "divider",
                         "&:hover": { borderColor: "primary.main", bgcolor: "primary.50" },
                       }}
-                      onClick={() => setContent(prompt)}
+                      onClick={() => onContentChange(prompt)}
                     >
                       {prompt}
                     </Button>
@@ -283,7 +284,7 @@ export function CanvasPanel({
               multiline
               fullWidth
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={(e) => onContentChange(e.target.value)}
               placeholder={`Writing recommendation for ${firstName}...`}
               variant="standard"
               InputProps={{

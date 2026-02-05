@@ -418,18 +418,27 @@ export default function VouchStudioPage() {
 
   const { student, bragSheet, letter } = data;
 
-  const handleCopySnippet = (text: string) => {
-    navigator.clipboard.writeText(text);
+  // Insert snippet into the letter at cursor position (or append)
+  const handleInsertToCanvas = (text: string) => {
+    // If there's existing content, add a space or newline before the new text
+    if (letterContent.trim()) {
+      // Check if we should add paragraph break or just space
+      const needsParagraphBreak = text.length > 50; // Longer snippets get paragraph break
+      const separator = needsParagraphBreak ? "\n\n" : " ";
+      setLetterContent((prev) => prev.trim() + separator + text);
+    } else {
+      setLetterContent(text);
+    }
     setSnackbar({
       open: true,
-      message: "Copied to clipboard",
-      severity: "info",
+      message: "Added to letter",
+      severity: "success",
     });
   };
 
   const handleGenerate = async (tone: string, angle: string): Promise<string> => {
     const generated = await generateLetter(student, bragSheet, tone, angle);
-    setLetterContent(generated);
+    // Note: CanvasPanel will call onContentChange with the generated content
     setSnackbar({
       open: true,
       message: "Letter generated successfully",
@@ -490,13 +499,14 @@ export default function VouchStudioPage() {
         <BrainPanel
           student={student}
           bragSheet={bragSheet}
-          onCopySnippet={handleCopySnippet}
+          onInsertToCanvas={handleInsertToCanvas}
         />
 
         {/* Right Panel - The Canvas */}
         <CanvasPanel
           studentName={`${student.firstName} ${student.lastName}`}
-          initialContent={letterContent}
+          content={letterContent}
+          onContentChange={setLetterContent}
           initialTone={letter.tone}
           initialAngle={letter.angle}
           onGenerate={handleGenerate}
