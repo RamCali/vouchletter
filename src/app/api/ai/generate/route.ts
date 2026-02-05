@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { openai } from "@/lib/ai/openai";
+import { anthropic } from "@/lib/ai/anthropic";
 import {
   buildSystemPrompt,
   buildUserPrompt,
@@ -22,18 +22,19 @@ export async function POST(request: NextRequest) {
     const systemPrompt = buildSystemPrompt();
     const userPrompt = buildUserPrompt({ student, bragSheet, tone, angle });
 
-    // Call OpenAI
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview",
+    // Call Claude
+    const message = await anthropic.messages.create({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1500,
+      system: systemPrompt,
       messages: [
-        { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
-      temperature: 0.7,
-      max_tokens: 1500,
     });
 
-    const generatedLetter = completion.choices[0]?.message?.content;
+    const generatedLetter = message.content[0]?.type === "text"
+      ? message.content[0].text
+      : null;
 
     if (!generatedLetter) {
       return NextResponse.json(
@@ -44,7 +45,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       letter: generatedLetter,
-      usage: completion.usage,
+      usage: {
+        input_tokens: message.usage.input_tokens,
+        output_tokens: message.usage.output_tokens,
+      },
     });
   } catch (error) {
     console.error("Letter generation error:", error);

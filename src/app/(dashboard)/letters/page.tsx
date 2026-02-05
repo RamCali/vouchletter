@@ -32,54 +32,75 @@ function getDaysUntil(deadline: string, now: number): number {
 function generateDemoStudents(): DemoStudent[] {
   const now = Date.now();
   return [
+    // === DUE THIS WEEK (2 students) ===
     {
       id: "1",
-      firstName: "John",
-      lastName: "Doe",
+      firstName: "Marcus",
+      lastName: "Demo",
       photoUrl: null,
       grade: 12,
       bragSheet: { completionPercent: 100 },
       letters: [
-        { id: "l1", status: "DRAFT", deadline: new Date(now + 3 * 24 * 60 * 60 * 1000).toISOString() },
+        {
+          id: "l1",
+          status: "DRAFT",
+          deadline: new Date(now + 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days
+        },
       ],
     },
     {
       id: "2",
-      firstName: "Sarah",
-      lastName: "Miller",
-      photoUrl: null,
-      grade: 12,
-      bragSheet: { completionPercent: 40 },
-      letters: [
-        { id: "l2", status: "BLOCKED", deadline: new Date(now + 5 * 24 * 60 * 60 * 1000).toISOString() },
-      ],
-    },
-    {
-      id: "3",
-      firstName: "Michael",
-      lastName: "Chen",
+      firstName: "Priya",
+      lastName: "Demo",
       photoUrl: null,
       grade: 12,
       bragSheet: { completionPercent: 100 },
       letters: [
-        { id: "l3", status: "REVIEW", deadline: new Date(now + 2 * 24 * 60 * 60 * 1000).toISOString() },
+        {
+          id: "l2",
+          status: "REVIEW",
+          deadline: new Date(now + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days
+        },
+      ],
+    },
+
+    // === WAITING ON STUDENT (2 students) ===
+    {
+      id: "3",
+      firstName: "Jordan",
+      lastName: "Demo",
+      photoUrl: null,
+      grade: 12,
+      bragSheet: { completionPercent: 35 },
+      letters: [
+        {
+          id: "l3",
+          status: "BLOCKED",
+          deadline: new Date(now + 10 * 24 * 60 * 60 * 1000).toISOString(), // 10 days
+        },
       ],
     },
     {
       id: "4",
-      firstName: "Emily",
-      lastName: "Rodriguez",
+      firstName: "Aaliyah",
+      lastName: "Demo",
       photoUrl: null,
       grade: 12,
-      bragSheet: { completionPercent: 75 },
+      bragSheet: { completionPercent: 65 },
       letters: [
-        { id: "l4", status: "BLOCKED", deadline: new Date(now + 10 * 24 * 60 * 60 * 1000).toISOString() },
+        {
+          id: "l4",
+          status: "BLOCKED",
+          deadline: new Date(now + 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days
+        },
       ],
     },
+
+    // === COMPLETED YTD (2 students) ===
     {
       id: "5",
-      firstName: "David",
-      lastName: "Kim",
+      firstName: "Elena",
+      lastName: "Demo",
       photoUrl: null,
       grade: 12,
       bragSheet: { completionPercent: 100 },
@@ -87,25 +108,12 @@ function generateDemoStudents(): DemoStudent[] {
     },
     {
       id: "6",
-      firstName: "Jessica",
-      lastName: "Patel",
-      photoUrl: null,
-      grade: 11,
-      bragSheet: { completionPercent: 100 },
-      letters: [
-        { id: "l6", status: "DRAFT", deadline: new Date(now + 7 * 24 * 60 * 60 * 1000).toISOString() },
-      ],
-    },
-    {
-      id: "7",
-      firstName: "Alex",
-      lastName: "Thompson",
+      firstName: "David",
+      lastName: "Demo",
       photoUrl: null,
       grade: 12,
-      bragSheet: { completionPercent: 20 },
-      letters: [
-        { id: "l7", status: "BLOCKED", deadline: new Date(now + 1 * 24 * 60 * 60 * 1000).toISOString() },
-      ],
+      bragSheet: { completionPercent: 100 },
+      letters: [{ id: "l6", status: "COMPLETED", deadline: null }],
     },
   ];
 }

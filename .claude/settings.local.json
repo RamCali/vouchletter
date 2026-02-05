@@ -18,7 +18,8 @@
       "Bash(gh repo create:*)",
       "Bash(vercel:*)",
       "Bash(git commit:*)",
-      "Bash(git push)"
+      "Bash(git push)",
+      "Bash(curl:*)"
     ]
   }
 }

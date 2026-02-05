@@ -67,47 +67,49 @@ interface DemoDataEntry {
   letter: Letter;
 }
 
-// Demo data - in production this would come from database
+// Demo data - 6 students matching the letters list page
 const DEMO_DATA: Record<string, DemoDataEntry> = {
+  // === DUE THIS WEEK (2 students) ===
   "1": {
     student: {
-      firstName: "John",
-      lastName: "Doe",
+      firstName: "Marcus",
+      lastName: "Demo",
       grade: 12,
-      gpa: 3.85,
+      gpa: 3.92,
     },
     bragSheet: {
-      threeWords: ["curious", "resilient", "leader"],
+      threeWords: ["innovative", "persistent", "collaborative"],
       intellectualSpark:
-        "Obsessed with robotics after building a line-following robot in 9th grade that won regional competition",
+        "Built a solar-powered water purification system for his family's farm in rural Guatemala after witnessing water scarcity during a summer visit. The project evolved into a nonprofit that has installed 15 systems across Central America.",
       struggleStory:
-        "When the robotics team lost funding sophomore year, John organized a crowdfunding campaign and corporate sponsorship outreach that raised $15,000, keeping the program alive.",
+        "When his father was laid off during sophomore year, Marcus took on a part-time job while maintaining his GPA. He learned to manage time ruthlessly and discovered a resilience he didn't know he had.",
       leadershipMoment:
-        "As robotics team captain, mentored 8 underclassmen and implemented a peer teaching system that improved team skill levels across the board.",
+        "Transformed the struggling robotics club from 6 members to 32 by creating a 'build your first robot in a weekend' workshop series. Three of his recruits are now team captains.",
       keyAnecdotes: [
         {
-          title: "The Server Room Incident",
+          title: "The 3AM Breakthrough",
           description:
-            "Stayed after school for 3 weeks debugging a server issue, eventually discovering a hardware fault that the IT team had missed.",
+            "During the state robotics competition, their robot's arm failed. While teammates slept, Marcus redesigned and 3D-printed a new mechanism overnight. They placed 2nd.",
         },
         {
-          title: "Community Impact",
+          title: "Teaching Moment",
           description:
-            "Organized STEM workshops at local elementary schools, reaching 200+ students.",
+            "Noticed a freshman struggling with physics concepts and created a peer tutoring system that now serves 40+ students weekly.",
         },
       ],
       counselorRating: "TOP_5_PERCENT",
       transcriptNotes:
-        "4 AP courses (CS, Physics, Calc BC, Stats). Strongest in STEM subjects. Writing has improved significantly.",
+        "5 AP courses including Physics C and CS A. Perfect scores in STEM. Strong upward trend in humanities. SAT: 1520.",
       activities: [
-        { name: "Robotics Team", role: "Captain", years: 4, description: "Led team to state finals" },
-        { name: "Math Club", role: "President", years: 3, description: "Organized competitions" },
-        { name: "Tutoring Center", role: "Volunteer", years: 2, description: "Peer tutoring in STEM" },
+        { name: "Robotics Team", role: "President & Lead Engineer", years: 4, description: "State finalists 2 years" },
+        { name: "Engineering Club", role: "Founder", years: 2, description: "Started from scratch" },
+        { name: "Peer Tutoring", role: "Coordinator", years: 2, description: "40+ students served" },
+        { name: "Water4All Nonprofit", role: "Founder", years: 2, description: "15 systems installed" },
       ],
       awards: [
-        { name: "Regional Robotics Champion", year: 2024, description: "" },
-        { name: "AP Scholar with Distinction", year: 2024, description: "" },
-        { name: "Principal's Honor Roll", year: 2024, description: "" },
+        { name: "State Robotics Finalist", year: 2025, description: "2nd place overall" },
+        { name: "AP Scholar with Distinction", year: 2025, description: "" },
+        { name: "Community Impact Award", year: 2024, description: "For Water4All project" },
       ],
     },
     letter: {
@@ -118,36 +120,124 @@ const DEMO_DATA: Record<string, DemoDataEntry> = {
   },
   "2": {
     student: {
-      firstName: "Sarah",
-      lastName: "Miller",
+      firstName: "Priya",
+      lastName: "Demo",
       grade: 12,
-      gpa: 3.72,
+      gpa: 3.97,
     },
     bragSheet: {
-      threeWords: ["empathetic", "determined", "creative"],
+      threeWords: ["curious", "empathetic", "driven"],
       intellectualSpark:
-        "Became passionate about environmental science after volunteering at a local watershed cleanup",
+        "After her grandmother's Alzheimer's diagnosis, Priya became fascinated with neuroscience. She secured a summer research position at the university hospital studying biomarkers for early detection, co-authoring a paper now under peer review.",
       struggleStory:
-        "Overcame learning differences (dyslexia) to become one of the top students in AP English, developing unique study strategies that she now shares with other students facing similar challenges.",
+        "As the first in her family to navigate the US college system, Priya faced constant cultural expectations to prioritize family obligations over academics. She found a way to honor both, becoming a bridge between her traditional family and her ambitious goals.",
       leadershipMoment:
-        "Founded the school's first Environmental Action Club, growing it from 5 to 45 members in one year.",
+        "Created a 'Science Sisters' mentorship program pairing female STEM students with middle schoolers. The program has served 150 girls and increased female enrollment in AP sciences by 40%.",
       keyAnecdotes: [
         {
-          title: "The Policy Change",
+          title: "The Research Presentation",
           description:
-            "Presented to the school board about single-use plastics, resulting in new sustainability policies.",
+            "Presented Alzheimer's research findings to a room of 200 medical professionals at a regional conference. Received standing ovation and multiple collaboration offers.",
+        },
+        {
+          title: "Cultural Bridge",
+          description:
+            "Organized a 'Careers in STEM' workshop in Hindi and Gujarati for immigrant parents, helping families understand and support their children's aspirations.",
+        },
+      ],
+      counselorRating: "TOP_1_PERCENT",
+      transcriptNotes:
+        "6 AP courses, all 5s. Research published. Perfect score in AP Biology. National Merit Semifinalist. SAT: 1560.",
+      activities: [
+        { name: "Hospital Research", role: "Research Assistant", years: 2, description: "Co-authored paper" },
+        { name: "Science Sisters", role: "Founder & Director", years: 2, description: "150 girls mentored" },
+        { name: "Model UN", role: "Secretary General", years: 3, description: "Led delegation to nationals" },
+        { name: "Indian Classical Dance", role: "Performer", years: 10, description: "Cultural preservation" },
+      ],
+      awards: [
+        { name: "National Merit Semifinalist", year: 2025, description: "" },
+        { name: "Regional Science Fair - 1st Place", year: 2024, description: "Neuroscience category" },
+        { name: "STEM Excellence Award", year: 2024, description: "District-wide recognition" },
+      ],
+    },
+    letter: {
+      content: "I am writing with my strongest possible endorsement for Priya Demo, an extraordinary young scientist and community leader who represents the very best of what education can produce.\n\nIn my 18 years as a guidance counselor, I have never encountered a student who so seamlessly combines rigorous academic achievement with genuine compassion for others. Priya's 3.97 GPA and six AP courses (all scored 5) merely hint at her intellectual capabilities. What truly distinguishes her is how she channels her brilliance toward solving real human problems.\n\nWhen Priya's grandmother was diagnosed with Alzheimer's disease, most students would have been devastated. Priya was devastated – and then she got to work. She secured a research position at our local university hospital, spending her summer studying biomarkers for early Alzheimer's detection. Her work contributed to a paper now under peer review in a respected medical journal. She was 16 years old.\n\nBut Priya's impact extends far beyond the laboratory. Recognizing the underrepresentation of women in STEM, she founded 'Science Sisters,' a mentorship program that has now served 150 middle school girls. Since the program's inception, female enrollment in our AP science courses has increased by 40%. Priya doesn't just excel – she lifts others as she rises.\n\nI place Priya in the top 1% of students I have ever counseled. She will transform whatever institution is fortunate enough to welcome her.",
+      tone: "ADVOCACY" as const,
+      angle: "STEM" as const,
+    },
+  },
+
+  // === WAITING ON STUDENT (2 students - partial brag sheets) ===
+  "3": {
+    student: {
+      firstName: "Jordan",
+      lastName: "Demo",
+      grade: 12,
+      gpa: 3.45,
+    },
+    bragSheet: {
+      threeWords: ["creative", "expressive", "authentic"],
+      intellectualSpark:
+        "Discovered passion for theater after a middle school production of 'Our Town.' Has since performed in 12 productions and directed 2 student-written plays.",
+      struggleStory: "", // Not yet completed
+      leadershipMoment: "", // Not yet completed
+      keyAnecdotes: [
+        {
+          title: "Standing Ovation",
+          description:
+            "Lead role in 'The Crucible' earned a standing ovation and a review in the local newspaper praising 'remarkable emotional depth.'",
         },
       ],
       counselorRating: "TOP_10_PERCENT",
       transcriptNotes:
-        "Strong upward trend. Started with B average, now straight A student. Exceptional growth in humanities.",
+        "Strong in humanities and arts. 3 AP courses. Active in drama and music programs. Shows exceptional emotional intelligence.",
       activities: [
-        { name: "Environmental Club", role: "Founder/President", years: 2, description: "Started from scratch" },
-        { name: "Debate Team", role: "Member", years: 3, description: "State qualifier" },
+        { name: "Drama Club", role: "President", years: 4, description: "Lead roles in 8 productions" },
+        { name: "A Cappella Group", role: "Vocal Director", years: 3, description: "Arranged 15 songs" },
       ],
       awards: [
-        { name: "Environmental Leadership Award", year: 2024, description: "" },
-        { name: "Most Improved Student", year: 2023, description: "" },
+        { name: "Best Actor - Regional Theater", year: 2024, description: "" },
+        { name: "Arts Excellence Award", year: 2024, description: "" },
+      ],
+    },
+    letter: {
+      content: "",
+      tone: "WARM" as const,
+      angle: "COMMUNITY" as const,
+    },
+  },
+  "4": {
+    student: {
+      firstName: "Aaliyah",
+      lastName: "Demo",
+      grade: 12,
+      gpa: 3.78,
+    },
+    bragSheet: {
+      threeWords: ["passionate", "articulate", "fearless"],
+      intellectualSpark:
+        "Became interested in social justice after witnessing housing discrimination against her family. Now interns with a civil rights law firm and has testified before the city council on housing equity.",
+      struggleStory:
+        "Growing up in a single-parent household with three younger siblings, Aaliyah often had to be the adult in the room. She managed household responsibilities while excelling academically.",
+      leadershipMoment: "", // Not yet completed
+      keyAnecdotes: [
+        {
+          title: "City Council Testimony",
+          description:
+            "At 16, testified before the city council about housing discrimination. Her testimony helped pass new tenant protection ordinances.",
+        },
+      ],
+      counselorRating: "TOP_5_PERCENT",
+      transcriptNotes:
+        "4 AP courses with strong performance in History and Government. Exceptional public speaker. Editor of school newspaper.",
+      activities: [
+        { name: "Civil Rights Law Firm", role: "Intern", years: 1, description: "Research and advocacy" },
+        { name: "School Newspaper", role: "Editor-in-Chief", years: 2, description: "Investigative journalism" },
+        { name: "Debate Team", role: "Captain", years: 3, description: "State qualifier" },
+      ],
+      awards: [
+        { name: "Young Advocate Award", year: 2024, description: "City recognition" },
+        { name: "State Debate Finalist", year: 2024, description: "" },
       ],
     },
     letter: {
@@ -156,47 +246,102 @@ const DEMO_DATA: Record<string, DemoDataEntry> = {
       angle: "RESILIENCE" as const,
     },
   },
-  "3": {
+
+  // === COMPLETED YTD (2 students) ===
+  "5": {
     student: {
-      firstName: "Michael",
-      lastName: "Chen",
+      firstName: "Elena",
+      lastName: "Demo",
       grade: 12,
-      gpa: 4.0,
+      gpa: 3.88,
     },
     bragSheet: {
-      threeWords: ["analytical", "compassionate", "dedicated"],
+      threeWords: ["resilient", "warm", "determined"],
       intellectualSpark:
-        "Developed a machine learning model to predict hospital readmission rates during a summer research internship",
+        "Fascinated by the intersection of business and social impact. Started a small business selling handmade jewelry, donating 50% of profits to scholarship funds for first-generation college students like herself.",
       struggleStory:
-        "As a first-generation college student, navigated the application process largely independently while supporting younger siblings.",
+        "As a first-generation American whose parents work multiple jobs, Elena has translated documents, attended parent-teacher conferences for her younger siblings, and navigated systems entirely unfamiliar to her family. She does this while maintaining near-perfect grades and working 15 hours a week.",
       leadershipMoment:
-        "Created a peer counseling program for first-gen students, personally mentoring 12 students through their college applications.",
+        "Founded the First-Gen Student Alliance at her school, creating a support network that has helped 45 first-gen students navigate college applications and financial aid.",
       keyAnecdotes: [
         {
-          title: "Research Breakthrough",
+          title: "The Scholarship Essay Workshop",
           description:
-            "Research paper accepted to a regional science conference - youngest presenter in the healthcare track.",
+            "Organized free essay workshops for first-gen students after realizing many had never seen a personal statement. 28 participants earned over $150,000 in combined scholarships.",
+        },
+        {
+          title: "Business for Good",
+          description:
+            "Her jewelry business has donated $4,200 to scholarship funds while teaching her valuable entrepreneurship skills.",
         },
       ],
-      counselorRating: "TOP_1_PERCENT",
+      counselorRating: "TOP_5_PERCENT",
       transcriptNotes:
-        "Perfect GPA. 6 AP courses. Research experience at university level. Strongest candidate in recent memory.",
+        "4 AP courses. Strong across all subjects. Balances work, family responsibilities, and academics remarkably well. Natural leader. SAT: 1480.",
       activities: [
-        { name: "Science Research", role: "Lead Researcher", years: 2, description: "Published work" },
-        { name: "First-Gen Mentors", role: "Founder", years: 1, description: "Peer support program" },
-        { name: "Hospital Volunteer", role: "Volunteer", years: 3, description: "200+ hours" },
+        { name: "First-Gen Alliance", role: "Founder & President", years: 2, description: "45 students supported" },
+        { name: "Jewelry Business", role: "Owner", years: 3, description: "$4,200 donated to scholarships" },
+        { name: "Part-time Job", role: "Retail Associate", years: 2, description: "15 hrs/week" },
+        { name: "Spanish Honor Society", role: "Vice President", years: 2, description: "Heritage language" },
       ],
       awards: [
-        { name: "National Merit Finalist", year: 2024, description: "" },
-        { name: "Science Fair 1st Place", year: 2024, description: "" },
-        { name: "Community Service Award", year: 2024, description: "" },
+        { name: "Community Leadership Award", year: 2025, description: "District recognition" },
+        { name: "Young Entrepreneur Award", year: 2024, description: "Chamber of Commerce" },
+        { name: "AP Scholar", year: 2024, description: "" },
       ],
     },
     letter: {
-      content:
-        "I am writing to offer my strongest possible recommendation for Michael Chen, a truly exceptional student who represents the very best of our school community.\n\nIn my 15 years as a guidance counselor, I have rarely encountered a student who combines Michael's intellectual gifts with such genuine compassion for others. His 4.0 GPA and six AP courses tell only part of the story – what sets Michael apart is how he uses his talents to lift others.\n\nAs a first-generation college student, Michael has navigated challenges that many of his peers cannot imagine. Rather than letting these obstacles define him, he has transformed them into opportunities for growth and service. He founded our school's First-Gen Mentors program, personally guiding 12 students through the college application process. His empathy for fellow first-gen students stems from his own experience, and his program has become a model that other schools in our district are now adopting.\n\nMichael's research accomplishments are equally impressive. During a summer internship at the university hospital, he developed a machine learning model to predict patient readmission rates – work that was presented at a regional science conference where he was the youngest speaker in the healthcare track. His analytical abilities are matched only by his work ethic and his genuine desire to use technology to help people.\n\nI place Michael in the top 1% of students I have counseled. He will make an immediate and lasting contribution to any university community fortunate enough to welcome him.",
+      content: "I am honored to recommend Elena Demo, a remarkable young woman whose resilience, warmth, and determination have made her one of the most impactful students I have encountered in my career.\n\nElena's story is one of quiet heroism. As a first-generation American, she has served as her family's navigator through unfamiliar systems – translating documents, attending meetings for her working parents, and guiding her younger siblings through school. She does all of this while maintaining a 3.88 GPA, working 15 hours a week, and somehow finding time to lift others alongside her.\n\nRecognizing that other first-generation students faced similar challenges, Elena founded the First-Gen Student Alliance. What started as informal peer support has become an institutionalized program serving 45 students. Her essay workshops alone have helped participants earn over $150,000 in combined scholarships. Elena saw a need and built a solution.\n\nHer entrepreneurial spirit extends beyond advocacy. Elena started a jewelry business, donating 50% of profits to first-gen scholarship funds. She has contributed $4,200 while learning valuable business skills. This is who Elena is: someone who finds ways to help others even while facing her own challenges.\n\nElena doesn't describe herself as remarkable – she would say she's simply doing what needs to be done. But that humility, combined with her extraordinary capability, is precisely what makes her exceptional. I rank her in the top 5% of students I have counseled.\n\nAny institution would be fortunate to welcome Elena. She will not just succeed – she will make everyone around her better.",
       tone: "WARM" as const,
       angle: "COMMUNITY" as const,
+    },
+  },
+  "6": {
+    student: {
+      firstName: "David",
+      lastName: "Demo",
+      grade: 12,
+      gpa: 3.75,
+    },
+    bragSheet: {
+      threeWords: ["disciplined", "supportive", "thoughtful"],
+      intellectualSpark:
+        "Became fascinated with sports psychology after reading about mental performance in athletics. Now studies how mindset affects performance and has implemented mental training programs for three school sports teams.",
+      struggleStory:
+        "After a severe knee injury ended his soccer career junior year, David had to rebuild his identity beyond athletics. He channeled his competitive drive into academics and discovered a passion for psychology that he never knew he had.",
+      leadershipMoment:
+        "As team captain, implemented 'mental performance Mondays' – weekly sessions on visualization, stress management, and team cohesion. The basketball team's free-throw percentage improved 15% and players reported feeling more confident under pressure.",
+      keyAnecdotes: [
+        {
+          title: "The Comeback Story",
+          description:
+            "After his injury, coached the JV soccer team to their first winning season in 5 years while completing his own rehabilitation. Players say he taught them more about resilience than technique.",
+        },
+        {
+          title: "Psychology in Action",
+          description:
+            "Designed and led a study on pre-game anxiety with 60 student-athletes, presented findings to the athletic department, resulting in new warm-up protocols.",
+        },
+      ],
+      counselorRating: "TOP_10_PERCENT",
+      transcriptNotes:
+        "3 AP courses. Strong in sciences and psychology. Excellent team player. Character reference from three coaches. SAT: 1420.",
+      activities: [
+        { name: "Varsity Soccer", role: "Former Captain / JV Coach", years: 4, description: "Injury ended playing career" },
+        { name: "Sports Psychology Club", role: "Founder", years: 1, description: "Mental performance training" },
+        { name: "Peer Counseling", role: "Counselor", years: 2, description: "Athletic department liaison" },
+        { name: "National Honor Society", role: "Member", years: 2, description: "" },
+      ],
+      awards: [
+        { name: "Coaches Award", year: 2024, description: "For leadership after injury" },
+        { name: "Student-Athlete of Character", year: 2024, description: "" },
+        { name: "Psychology Research Recognition", year: 2024, description: "Athletic department" },
+      ],
+    },
+    letter: {
+      content: "I write to enthusiastically recommend David Demo, a young man whose character has been revealed not in moments of triumph, but in how he responded to adversity.\n\nDavid was on track to be one of our strongest soccer players – a varsity captain with college recruitment interest. Then, midway through his junior year, a severe knee injury ended his playing career. What happened next says everything about who David is.\n\nRather than retreat, David transformed. He became a JV coach, leading the team to their first winning season in five years. His players speak not about tactics, but about how David taught them to handle pressure, to support teammates, and to find joy in competition regardless of outcomes. He gave them what he had lost – and found something new in the process.\n\nDavid's injury sparked an intellectual curiosity about sports psychology. He founded our school's first Sports Psychology Club, implementing mental performance training for three varsity teams. His 'Mental Performance Mondays' sessions improved the basketball team's free-throw percentage by 15%. He also designed and conducted a study on pre-game anxiety with 60 student-athletes, presenting findings that changed our athletic department's warm-up protocols.\n\nDavid's 3.75 GPA reflects his academic abilities, but his real transcript is written in the lives he's touched. Three coaches independently submitted character references calling him 'the most mature high schooler they've worked with.'\n\nI place David in the top 10% of students I have counseled. He has already demonstrated the kind of character that many adults never develop. Any institution would benefit from his presence.",
+      tone: "WARM" as const,
+      angle: "RESILIENCE" as const,
     },
   },
 };
@@ -231,7 +376,9 @@ ${angleEmphasis[angle] || angleEmphasis.RESILIENCE}
 
 With a GPA of ${student.gpa} and demonstrated leadership in ${bragSheet.activities?.[0]?.name || "multiple activities"}, ${student.firstName} has proven themselves academically and personally.
 
-I rank ${student.firstName} in the ${bragSheet.counselorRating?.replace("_", " ").toLowerCase() || "top tier"} of students I have counseled. They will make an immediate contribution to any campus community.`;
+${bragSheet.keyAnecdotes?.[0] ? `One story captures ${student.firstName}'s essence: ${bragSheet.keyAnecdotes[0].description}` : ""}
+
+I rank ${student.firstName} in the ${bragSheet.counselorRating?.replace(/_/g, " ").toLowerCase() || "top tier"} of students I have counseled. They will make an immediate contribution to any campus community.`;
 }
 
 export default function VouchStudioPage() {
