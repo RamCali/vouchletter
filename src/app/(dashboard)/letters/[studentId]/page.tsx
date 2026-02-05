@@ -475,14 +475,15 @@ export default function VouchStudioPage() {
         </Breadcrumbs>
       </Stack>
 
-      {/* Split Screen */}
+      {/* Split Screen - Responsive: stack on mobile, side-by-side on desktop */}
       <Box
         sx={{
           flex: 1,
           display: "grid",
-          gridTemplateColumns: "1fr 1fr",
+          gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
           gap: 2,
           minHeight: 0,
+          overflow: { xs: "auto", md: "hidden" },
         }}
       >
         {/* Left Panel - The Brain */}

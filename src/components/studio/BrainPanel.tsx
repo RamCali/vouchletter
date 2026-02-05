@@ -47,10 +47,10 @@ export function BrainPanel({ student, bragSheet, onCopySnippet }: { student: Stu
         <Typography variant="h6" sx={{ fontWeight: 600 }}>The Brain</Typography>
         <Typography variant="caption" color="text.secondary">Context for {student.firstName} {student.lastName}</Typography>
       </Box>
-      <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2, borderBottom: 1, borderColor: "divider" }}>
-        <Tab icon={<LightbulbIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Hook" sx={{ minHeight: 48 }} />
-        <Tab icon={<EmojiEventsIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Proof" sx={{ minHeight: 48 }} />
-        <Tab icon={<AssessmentIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Stats" sx={{ minHeight: 48 }} />
+      <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2, borderBottom: 1, borderColor: "divider" }} variant="fullWidth">
+        <Tab icon={<LightbulbIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Hook" sx={{ minHeight: 48, minWidth: 0, px: 1 }} />
+        <Tab icon={<EmojiEventsIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Proof" sx={{ minHeight: 48, minWidth: 0, px: 1 }} />
+        <Tab icon={<AssessmentIcon sx={{ fontSize: 18 }} />} iconPosition="start" label="Stats" sx={{ minHeight: 48, minWidth: 0, px: 1 }} />
       </Tabs>
       <Box sx={{ flex: 1, overflow: "auto", px: 2, py: 2 }}>
         {tab === 0 && (
@@ -71,10 +71,10 @@ export function BrainPanel({ student, bragSheet, onCopySnippet }: { student: Stu
           <>
             <Card variant="outlined" sx={{ mb: 2 }}>
               <CardContent>
-                <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
-                  <Box><Typography variant="caption" color="text.secondary">GPA</Typography><Typography variant="h5" sx={{ fontWeight: 700 }}>{student.gpa?.toFixed(2) || "N/A"}</Typography></Box>
+                <Stack direction="row" justifyContent="space-around" alignItems="center" sx={{ mb: 2 }}>
+                  <Box sx={{ textAlign: "center" }}><Typography variant="caption" color="text.secondary">GPA</Typography><Typography variant="h5" sx={{ fontWeight: 700 }}>{student.gpa?.toFixed(2) || "N/A"}</Typography></Box>
                   <Divider orientation="vertical" flexItem />
-                  <Box><Typography variant="caption" color="text.secondary">Grade</Typography><Typography variant="h5" sx={{ fontWeight: 700 }}>{student.grade}</Typography></Box>
+                  <Box sx={{ textAlign: "center" }}><Typography variant="caption" color="text.secondary">Grade</Typography><Typography variant="h5" sx={{ fontWeight: 700 }}>{student.grade}</Typography></Box>
                 </Stack>
                 <Typography variant="caption" color="text.secondary">Counselor Rating</Typography>
                 <Stack direction="row" spacing={1} alignItems="center">
